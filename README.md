@@ -359,48 +359,6 @@ Excel files with:
 
 ---
 
-## Caching System
-
-The caching system uses **MD5 hashing** of model parameters as keys.
-
-### How it Works
-```python
-from result_cache import load_result, save_result
-
-# Load (automatically computes key)
-result = load_result(
-    region="Hampshire",
-    instance=1,
-    budget_factor=0.808,
-    cache_dir="own_results/model_cache",
-    strict_assign_to_one=False,
-    cap_factor=1.5,
-    cutoff=0.2,
-    max_access=False
-)
-
-# Save (automatically computes key)
-save_result(result, cache_dir="own_results/model_cache")
-```
-
-### Benefits
-- **Fast:** Results load in <1 second vs. 5-10 min re-solve
-- **Deduplication:** Identical parameter sets reuse cached results
-- **Transparent:** MD5 keys ensure reproducibility
-
-### Managing Cache
-```python
-from result_cache import list_cached_results, clear_cache
-
-# List all cached results
-results = list_cached_results("own_results/model_cache")
-
-# Clear entire cache
-clear_cache("own_results/model_cache")
-```
-
----
-
 ## Model Parameters
 
 ### Primary Parameters (Used for Main Results)
@@ -423,46 +381,6 @@ FALLBACK_PARAMS = {
 }
 ```
 
----
-
-## Troubleshooting
-
-### Issue: "No cached results found"
-**Solution:** Run `solve_and_cache_models.py` first
-```bash
-python solve_and_cache_models.py --region Hampshire --instance 1
-```
-
-### Issue: Gurobi license error
-**Solution:** Ensure Gurobi is installed and licensed
-```bash
-grbgetkey <your_license_key>
-```
-
-### Issue: GeoJSON file not found
-**Solution:** Verify file exists
-```bash
-ls data/map_data/all_sectors.geojson
-```
-
-### Issue: "engine='pyogrio' not available"
-**Solution:** Falls back to `fiona` automatically; if that fails, install:
-```bash
-pip install fiona
-```
-
----
-
-## Performance Notes
-
-- **solve_and_cache_models.py:** ~5-10 min (full batch)
-- **heatmap_plot.py:** ~30 seconds (cached)
-- **reassignment_table.py:** ~10 seconds (cached)
-- **create_region_figures.py:** ~5-10 min (runs optimizations; uses cache if available)
-- **create_region_tables.py (quick):** ~5-10 min (tables 1–4)
-- **create_region_tables.py (--run-heavy):** 2-4+ hours (tables 5–7 are computationally intensive)
-
-Total time for full pipeline: ~6 minutes (first time with cached models) → ~40 seconds (subsequent runs)
 
 ---
 
@@ -564,12 +482,3 @@ if result:
 else:
     print(f"Result not found. Run: python solve_and_cache_models.py --region {region} --instance {instance}")
 ```
-
----
-## Support
-
-For issues, questions, or contributions:
-1. Check `GETTING_STARTED.md` for setup help
-2. See `CACHING_QUICKREF.md` for caching questions
-3. Review script docstrings for detailed usage
-
