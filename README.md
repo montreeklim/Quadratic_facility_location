@@ -316,25 +316,6 @@ The framework currently supports:
 | **Bavaria** | 4 | 1500 | 425 | Facility locations in Bavaria region, Germany |
 | Custom | Any | Variable | Variable | Add your own dataset (see Adding New Regions below) |
 
-## Budget Levels Explained
-
-The optimization solves for 4 primary budget levels (can be customized):
-
-| Budget | Label | Meaning | Impact |
-|--------|-------|---------|--------|
-| 1.0    | 100%  | Full budget (baseline) | Most facilities open |
-| 21/26  | 81%   | 81% of full budget | Fewer facilities |
-| 14/26  | 54%   | 54% of full budget | Further reduction |
-| 9/26   | 35%   | 35% of full budget | Minimal facilities |
-
-**Note:** For Hampshire with 26 facilities, these match 26, 21, 14, 9 facilities. For other regions, budget factors scale proportionally.
-
-Budget constraints are enforced via:
-- Cost = facility operating cost (represented as annual budget)
-- Each scenario finds optimal facility set + assignments under the budget cap
-
----
-
 ## Key Output Files
 
 ### Cached Results
