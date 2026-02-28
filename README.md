@@ -1,4 +1,4 @@
-# Quadratic Facility Location with Capacity Constraints
+# Quadratic Facility Location
 
 ## Project Overview
 
