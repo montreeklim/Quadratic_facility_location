@@ -1,0 +1,152 @@
+% LaTeX manuscript draft for quadratic facility location case studies
+% Generated with placeholders for numeric results and figures.
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\title{Software-Enabled Quadratic Facility Location with Capacity Constraints:\\
+Case Studies in Hampshire and Bavaria}
+\author{Author Name(s)\\
+Affiliation(s)\\
+Email(s)}
+\date{February 12, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Quadratic facility location with capacity constraints is a core problem in spatial planning and public service design, yet practical adoption often depends on accessible software workflows for data preparation, optimization, and interpretation. This paper presents a software-enabled pipeline for mixed-integer quadratic programming (MIQP) and heuristic solutions, with caching and visualization to support reproducible experimentation. We demonstrate the pipeline on two datasets: household waste recycling centers in Hampshire (UK) and a large-scale facility location instance in Bavaria (Germany, instance 4). We report empirical outcomes under multiple budget levels, and discuss trade-offs between access, utilization, and reassignment impacts. Quantitative results are provided as placeholders for integration with the repository outputs.
+\end{abstract}
+
+\section{Introduction}
+Quadratic facility location problems (QFLP) with capacity constraints capture interactions between assignment decisions and facility utilization. These interactions arise in public service networks, such as recycling centers, healthcare sites, and logistics depots, where congestion or capacity utilization contributes nonlinearly to system cost. Despite extensive research, the applied workflow often remains fragmented: models are developed in isolation, while data handling, scenario iteration, and visualization require significant custom effort.
+
+This paper contributes a unified, software-focused workflow for QFLP: a Python-based modeling stack with MIQP and heuristic solvers, automated caching for parameter sweeps, and standardized figure/table generation. The workflow is demonstrated on two real-world settings: Hampshire Household Waste Recycling Centers (HWRCs) and Bavaria facility location (instance 4). We focus on budget-constrained scenarios to illustrate closure and reassignment effects.
+
+\section{Related Work and Software Context}
+Facility location has a long history in operations research, including linear and quadratic formulations, capacity constraints, and variants with fairness or equity considerations. Recent work emphasizes reproducible computational experiments and software tools that bridge modeling and policy analysis. Our approach aligns with that direction by providing a single repository with standardized scripts for solving, caching, and producing publication-ready outputs.
+
+\section{Problem Definition}
+We consider a set of users $U$ and candidate facilities $F$. Each facility $j \in F$ has capacity $c_j$ and operating cost $k_j$. Each user $i \in U$ has demand $d_i$ and a distance cost $\ell_{ij}$ to facility $j$. The decision variables include facility opening $y_j \in \{0,1\}$ and assignment $x_{ij} \in \{0,1\}$.
+
+The quadratic objective captures congestion or utilization effects as a function of facility load, while assignment costs are linear:
+\begin{align}
+\min \quad & \sum_{i \in U} \sum_{j \in F} \ell_{ij} x_{ij} + \lambda \sum_{j \in F} \left(\sum_{i \in U} d_i x_{ij}\right)^2 \\
+\text{s.t.} \quad & \sum_{j \in F} x_{ij} = 1, \quad \forall i \in U \\
+& \sum_{i \in U} d_i x_{ij} \le c_j y_j, \quad \forall j \in F \\
+& \sum_{j \in F} k_j y_j \le B \\
+& x_{ij} \le y_j, \quad \forall i \in U, j \in F \\
+& x_{ij} \in \{0,1\},\; y_j \in \{0,1\}
+\end{align}
+Here $B$ denotes the budget level and $\lambda$ tunes the quadratic congestion penalty.
+
+\section{Software Framework}
+The software framework is implemented in Python, using Pyomo for modeling and Gurobi for MIQP. A caching layer stores results keyed by a hash of model parameters, enabling repeatable batch runs. The workflow also includes figure and table generation scripts and map-based visualization.
+
+Key components include:
+\begin{itemize}[leftmargin=*]
+\item MIQP and heuristic solvers for QFLP with capacity and budget constraints.
+\item Result caching for parameter sweeps and scenario comparisons.
+\item Automated generation of figures (access and utilization maps) and tables (reassignment summaries, budget trade-offs).
+\end{itemize}
+
+\section{Datasets}
+\subsection{Hampshire (UK)}
+The Hampshire dataset represents Household Waste Recycling Centers (HWRCs) with user locations and facility capacities. The instance contains \textbf{[Users\_H]} users and \textbf{[Facs\_H]} facilities. Distances are computed from user locations to facilities and aggregated at the postcode sector level for visualization.
+
+\subsection{Bavaria (Germany, Instance 4)}
+The Bavaria instance 4 dataset is a larger-scale facility location setting with \textbf{[Users\_B4]} users and \textbf{[Facs\_B4]} facilities. The problem scale tests solver performance and the usefulness of caching and heuristic alternatives for scenario iteration.
+
+\section{Experimental Setup}
+We evaluate multiple budget factors, corresponding to the fraction of facilities that can remain open. For each budget level, we solve the MIQP formulation and compute the following metrics:
+\begin{itemize}[leftmargin=*]
+\item Mean and percentile user-to-facility distance.
+\item Facility utilization distribution.
+\item Reassignment statistics when facilities close.
+\end{itemize}
+Solver settings follow default Gurobi parameters with a time limit of \textbf{[TimeLimit]} minutes where applicable. Heuristic results are reported for comparison in the larger Bavaria instance.
+
+\section{Case Study 1: Hampshire}
+Figure~\ref{fig:hampshire_maps} shows distance and utilization maps under four budget levels. As budget decreases, mean access cost increases while utilization rises among remaining facilities. The reassignment analysis (Table~\ref{tab:hampshire_reassign}) highlights the share of users moved between facilities when closures occur.
+
+\begin{figure}[t]
+\centering
+\fbox{\parbox{0.9\linewidth}{\centering Placeholder: Hampshire distance and utilization maps for four budgets.}}
+\caption{Hampshire access and utilization maps across budget scenarios.}
+\label{fig:hampshire_maps}
+\end{figure}
+
+\begin{table}[t]
+\centering
+\caption{Hampshire reassignment summary (placeholder values).}
+\label{tab:hampshire_reassign}
+\begin{tabular}{lccc}
+\toprule
+Budget & Users Reassigned (\%) & Median Distance (km) & Notes \\
+\midrule
+100\% & [H\_A1] & [H\_D1] & Baseline \\
+81\%  & [H\_A2] & [H\_D2] & \\
+54\%  & [H\_A3] & [H\_D3] & \\
+35\%  & [H\_A4] & [H\_D4] & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Case Study 2: Bavaria (Instance 4)}
+The Bavaria instance 4 results illustrate scalability and the benefit of caching. Figure~\ref{fig:bavaria_maps} summarizes access and utilization outcomes. Table~\ref{tab:bavaria_reassign} reports reassignment impacts. The quadratic congestion penalty mitigates extreme utilization in high-demand clusters, at the cost of increased travel distance for some users.
+
+\begin{figure}[t]
+\centering
+\fbox{\parbox{0.9\linewidth}{\centering Placeholder: Bavaria instance 4 distance and utilization maps.}}
+\caption{Bavaria (instance 4) access and utilization maps across budget scenarios.}
+\label{fig:bavaria_maps}
+\end{figure}
+
+\begin{table}[t]
+\centering
+\caption{Bavaria instance 4 reassignment summary (placeholder values).}
+\label{tab:bavaria_reassign}
+\begin{tabular}{lccc}
+\toprule
+Budget & Users Reassigned (\%) & Median Distance (km) & Notes \\
+\midrule
+100\% & [B4\_A1] & [B4\_D1] & Baseline \\
+81\%  & [B4\_A2] & [B4\_D2] & \\
+54\%  & [B4\_A3] & [B4\_D3] & \\
+35\%  & [B4\_A4] & [B4\_D4] & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Discussion}
+The two case studies show consistent trade-offs: lower budgets increase distance and utilization, and trigger reassignment for a nontrivial share of users. The quadratic term tempers overloading but can shift travel burdens. The framework allows rapid scenario comparison and supports both exact MIQP and heuristic alternatives for larger cases.
+
+\section{Reproducibility}
+All experiments can be reproduced using the repository scripts. The workflow solves models, caches results, and generates figures/tables. Example commands (from the repository root):
+\begin{verbatim}
+cd src/models
+python solve_and_cache_models.py --region Hampshire --instance 1
+python solve_and_cache_models.py --region Bavaria --instance 4
+python create_region_figures.py --region Hampshire --instance-number 1
+python create_region_figures.py --region Bavaria --instance-number 4
+python create_region_tables.py --region Hampshire --instance-number 1
+python create_region_tables.py --region Bavaria --instance-number 4
+\end{verbatim}
+
+\section{Conclusion}
+This paper presents a software-driven pipeline for quadratic facility location with capacity constraints, demonstrated on Hampshire and Bavaria instance 4. The workflow supports reproducible experimentation, offers both exact and heuristic methods, and yields interpretable outputs for decision-making. Future work will incorporate richer equity constraints and dynamic demand.
+
+\section*{Acknowledgments}
+Placeholder for funding and acknowledgments.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
