@@ -195,26 +195,33 @@ python heatmap_plot.py --region <REGION> --instance <INSTANCE>
 
 # Examples:
 python heatmap_plot.py --region Hampshire --instance 1
-python heatmap_plot.py --region Bavaria --instance 3
+python heatmap_plot.py --region Bavaria --instance 4
 ```
 
 **What it does:**
-- Loads cached results for 4 budget levels for Hampshire dataset: [1.0, 21/26 ≈ 0.808, 14/26 ≈ 0.538, 9/26 ≈ 0.346] and 8 budget levels from 0.3 to 1.0 for other datasets.
-- Computes mean user→facility distance per postcode sector
+- Loads cached results for 4 budget levels for Hampshire: [1.0, 21/26 ≈ 0.808, 14/26 ≈ 0.538, 9/26 ≈ 0.346], and 8 budget levels (0.3–1.0) for Bavaria
+- Computes mean user→facility distance per zone (miles for Hampshire, km for Bavaria)
 - Computes facility utilization %
-- Generates 4 static Matplotlib maps as PDFs
-- Generates optional Folium HTML maps
+- **Hampshire:** choropleth built from UK postcode sector polygons (`all_sectors.geojson`)
+- **Bavaria:** choropleth built by assigning each PLZ polygon to its nearest zone centroid (`plz-5stellig.geojson`), with the Bayern state border from `bayern.geojson`
+- Distance color scale auto-computed from actual data (rounded up to nearest 5 units, capped by region config)
+- Generates static Matplotlib PDFs and an interactive Folium HTML map (Thunderforest tiles)
+
+**Map style:**
+- Background: grey (`#b0b0b0`)
+- Distance colormap: `YlGnBu` (yellow → green → dark blue)
+- Utilization colormap: `OrRd` (light orange → dark red)
+- Distance scale: 0–15 miles (Hampshire), 0–25 km (Bavaria instance 4)
 
 **Output:**
-- `own_results/heat_maps/{region}_map_static_b35.pdf` (35% budget)
-- `own_results/heat_maps/{region}_map_static_b54.pdf` (54% budget)
-- `own_results/heat_maps/{region}_map_static_b81.pdf` (81% budget)
-- `own_results/heat_maps/{region}_map_static_b100.pdf` (100% budget)
-- `own_results/{region}_summary.csv` (distance statistics)
+- `own_results/heat_maps/{region}_{instance}_map.html` (interactive Folium map)
+- `own_results/heat_maps/{region}_{instance}_map_static_b{pct}.pdf` (one PDF per budget level)
+- `own_results/{region}_{instance}_summary.csv` (distance statistics)
 
 **Requirements:**
 - Cached models (from `solve_and_cache_models.py`)
-- GeoJSON files (if available) for choropleth regions
+- `data/map_data/all_sectors.geojson` (Hampshire choropleth)
+- `data/map_data/plz-5stellig.geojson` + `data/map_data/bayern.geojson` (Bavaria choropleth)
 
 ---
 
