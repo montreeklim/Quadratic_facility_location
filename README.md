@@ -50,11 +50,9 @@ Quadratic_facility_location/
 │       ├── results_heuristics.py    # Heuristic results processing
 │       └── figures_and_tables.py    # General figure/table generation
 ├── own_results/
-│   ├── model_cache/                 # Cached JSON results (auto-generated)
+│   ├── model_cache/                 # Cached JSON results
 │   ├── heat_maps/                   # Generated PDF maps
 │   ├── reassignment_outputs/        # Reassignment Excel tables
-│   └── hampshire_summary.csv        # Summary statistics
-├── CACHING_QUICKREF.md              # One-page caching reference
 └── README.md                        # This file
 ```
 
