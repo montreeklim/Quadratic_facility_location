@@ -182,9 +182,7 @@ python heatmap_plot.py --region Bavaria --instance 4
 - Generates static Matplotlib PDFs
 
 **Output:**
-- `own_results/heat_maps/{region}_{instance}_map.html` (interactive Folium map)
 - `own_results/heat_maps/{region}_{instance}_map_static_b{pct}.pdf` (one PDF per budget level)
-- `own_results/{region}_{instance}_summary.csv` (distance statistics)
 
 **Requirements:**
 - Cached models (from `solve_and_cache_models.py`)
