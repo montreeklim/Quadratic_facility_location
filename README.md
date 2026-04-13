@@ -27,7 +27,9 @@ Quadratic_facility_location/
 │   ├── instance_*.json.pbz2         # Other custom instances
 │   └── map_data/
 │       ├── all_sectors.geojson      # UK postcode sector boundaries
-│       └── Counties_and_Unitary_Authorities_*.geojson  # Administrative boundaries
+│       ├── Counties_and_Unitary_Authorities_*.geojson  # Administrative boundaries
+│       ├── plz-5stellig.geojson     # German 5-digit PLZ polygon boundaries
+│       └── bayern.geojson           # German state boundaries (used for Bavaria border)
 ├── src/
 │   └── models/
 │       ├── model.py                 # MIQP optimization model
