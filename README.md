@@ -103,11 +103,11 @@ python solve_and_cache_models.py --region Bavaria --instance 1
 # For Bavaria (instance 3 or 4):
 python solve_and_cache_models.py --region Bavaria --instance 3
 
-# 2. Generate heatmaps (loads from cache, ~30 seconds)
+# 2. Generate heatmaps (loads from cache)
 python heatmap_plot.py --region Hampshire --instance 1
 # Output: own_results/heat_maps/{region}_map_static_b*.pdf
 
-# 3. Generate reassignment tables (loads from cache, ~10 seconds)
+# 3. Generate reassignment tables (loads from cache)
 python reassignment_table.py --region Hampshire --instance 1
 # Output: own_results/reassignment_outputs/Reassignment_*.xlsx
 ```
@@ -117,9 +117,9 @@ python reassignment_table.py --region Hampshire --instance 1
 **If models are already cached (from Option A):**
 
 ```bash
-# Generate static maps for a specific region
+# Generate heatmaps for a specific region
 python heatmap_plot.py --region Hampshire --instance 1
-# Output: own_results/heat_maps/hampshire_map_static_b*.pdf (4 files for 4 budgets)
+# Output: own_results/heat_maps/hampshire_map_static_b*.pdf 
 
 # Or for Bavaria:
 python heatmap_plot.py --region Bavaria --instance 3
@@ -152,7 +152,6 @@ python solve_and_cache_models.py --region Bavaria --instance 3
 - Loads dataset for specified region and instance
 - Solves MIP model for multiple budget levels: [0.3, 0.4, ..., 1.0] by default
 - Caches results as `result_<MD5_hash>.json` in `own_results/model_cache/`
-- Takes ~5-10 minutes (depending on Gurobi settings and problem size)
 
 **Region Examples:**
 - **Hampshire** - 266 users, 26 facilities
@@ -167,7 +166,6 @@ python solve_and_cache_models.py --region Bavaria --instance 3
 
 ### 2. **heatmap_plot.py** - Visualization
 **Purpose:** Generates choropleth maps showing distance and utilization by budget  
-**When to use:** After models are cached (or for re-generating visualizations)
 
 ```bash
 # Generate maps for any region and instance
@@ -207,7 +205,6 @@ python heatmap_plot.py --region Bavaria --instance 4
 
 ### 3. **reassignment_table.py** - Reassignment Analysis
 **Purpose:** Analyzes how users are reassigned when facilities close due to budget constraints  
-**When to use:** After models are cached
 
 ```bash
 # Generate reassignment tables for any region and instance
@@ -234,8 +231,7 @@ python reassignment_table.py --region Bavaria --instance 3
 ---
 
 ### 4. **create_region_figures.py** - Figure Generation (Any Region)
-**Purpose:** Generates Figures 3a–8 for a chosen region/instance (same outputs as the Hampshire-only script)  
-**When to use:** After models are cached (recommended)
+**Purpose:** Generates analysis plots for a chosen region/instance (same outputs as the Hampshire-only script)  
 
 ```bash
 # From src/models
@@ -262,22 +258,21 @@ python create_region_figures.py --region Bavaria --instance-number 3
 ---
 
 ### 5. **create_region_tables.py** - Table Generation (Any Region)
-**Purpose:** Generates Tables 1–7 for a chosen region/instance (same outputs as the Hampshire-only script)  
-**When to use:** After models are cached (recommended)
+**Purpose:** Generates analysis tables for a chosen region/instance 
 
 ```bash
 # From src/models
-# Quick mode (tables 1–4 only)
+# Quick mode
 python create_region_tables.py --region Hampshire --instance-number 1
 
-# Full mode (tables 1–7 including heavy tables)
+# Full mode 
 python create_region_tables.py --region Bavaria --instance-number 3 --run-heavy
 ```
 
 **Arguments:**
 - `--region`: region name (e.g., Hampshire, Bavaria)
 - `--instance-number`: dataset instance (default: 1)
-- `--run-heavy` (optional): also generate tables 5–7 (very heavy, may take hours)
+- `--run-heavy` (optional): also generate tables related to heuristics 
 - `--base-dir` (optional): workspace root if auto-detection fails
 
 **Quick Mode Output (default):**
@@ -288,8 +283,8 @@ python create_region_tables.py --region Bavaria --instance-number 3 --run-heavy
 
 **Heavy Tables (with --run-heavy):**
 - `own_results/{region}_table5_greedy_results_nocutoff.xlsx` (~heavy runtime)
-- `own_results/{region}_table6_cutoff_results.xlsx` (~very heavy runtime)
-- `own_results/{region}_table7_greedy_results_cutoff.xlsx` (~very heavy runtime)
+- `own_results/{region}_table6_cutoff_results.xlsx` (~heavy runtime)
+- `own_results/{region}_table7_greedy_results_cutoff.xlsx` (~heavy runtime)
 
 ---
 
@@ -315,8 +310,6 @@ Create CSV and compressed JSON files in `data/`:
 ```
 data/
 ├── Yorkshire_users_and_facs.csv      # Columns: user_id, lat, lon, population, facility_id, capacity, ...
-├── Yorkshire_travel_dict.json.pbz2   # Dict: {user_id: {facility_id: distance, ...}, ...}
-├── Yorkshire_distance_dict.json.pbz2 # Optional: pre-computed distances
 └── map_data/
     └── yorkshire_sectors.geojson     # Optional: region boundaries for choropleth
 ```
@@ -337,13 +330,7 @@ python solve_and_cache_models.py --region Yorkshire --instance 1
 
 # Generate visualizations
 python heatmap_plot.py --region Yorkshire --instance 1
-
-# Analyze reassignments
-python Table5.py --region Yorkshire --instance 1
 ```
-
-### 4. Optional: Add GeoJSON for Maps
-If choropleth maps are desired, add GeoJSON boundaries to `data/map_data/yorkshire_sectors.geojson`
 
 ---
 
