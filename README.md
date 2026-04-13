@@ -177,19 +177,9 @@ python heatmap_plot.py --region Bavaria --instance 4
 ```
 
 **What it does:**
-- Loads cached results for 4 budget levels for Hampshire: [1.0, 21/26 ≈ 0.808, 14/26 ≈ 0.538, 9/26 ≈ 0.346], and 8 budget levels (0.3–1.0) for Bavaria
-- Computes mean user→facility distance per zone (miles for Hampshire, km for Bavaria)
+- Computes mean user→facility distance per user (miles for Hampshire, km for Bavaria)
 - Computes facility utilization %
-- **Hampshire:** choropleth built from UK postcode sector polygons (`all_sectors.geojson`)
-- **Bavaria:** choropleth built by assigning each PLZ polygon to its nearest zone centroid (`plz-5stellig.geojson`), with the Bayern state border from `bayern.geojson`
-- Distance color scale auto-computed from actual data (rounded up to nearest 5 units, capped by region config)
-- Generates static Matplotlib PDFs and an interactive Folium HTML map (Thunderforest tiles)
-
-**Map style:**
-- Background: grey (`#b0b0b0`)
-- Distance colormap: `YlGnBu` (yellow → green → dark blue)
-- Utilization colormap: `OrRd` (light orange → dark red)
-- Distance scale: 0–15 miles (Hampshire), 0–25 km (Bavaria instance 4)
+- Generates static Matplotlib PDFs
 
 **Output:**
 - `own_results/heat_maps/{region}_{instance}_map.html` (interactive Folium map)
