@@ -58,24 +58,6 @@ Quadratic_facility_location/
 
 ---
 
-## Generate Figures & Tables (Any Region)
-
-From src/models:
-
-```bash
-# Figures (3a–8)
-python create_region_figures.py --region Hampshire --instance-number 1
-python create_region_figures.py --region Bavaria --instance-number 3
-
-# Tables (1–4 by default)
-python create_region_tables.py --region Hampshire --instance-number 1
-
-# Tables (1–7, heavy)
-python create_region_tables.py --region Bavaria --instance-number 3 --run-heavy
-```
-
----
-
 ## Installation & Setup
 
 ### Prerequisites
